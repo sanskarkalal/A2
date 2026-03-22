@@ -1,3 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">A2</string>
+    <string name="app_name">Chicago Guide</string>
+
+    <!-- Attraction names -->
+    <string-array name="attractions_names">
+        <item>Lincoln Park Zoo</item>
+        <item>Navy Pier</item>
+        <item>Museum of Science and Industry</item>
+        <item>Art Institute of Chicago</item>
+        <item>Willis Tower Skydeck</item>
+    </string-array>
+
+    <!-- Attraction URLs -->
+    <string-array name="attractions_urls">
+        <item>https://www.lpzoo.org</item>
+        <item>https://navypier.org</item>
+        <item>https://www.msichicago.org</item>
+        <item>https://www.artic.edu</item>
+        <item>https://www.theskydeck.com</item>
+    </string-array>
+
+    <!-- Restaurant names -->
+    <string-array name="restaurants_names">
+        <item>Girl and the Goat</item>
+        <item>Lou Malnati\'s Pizzeria</item>
+        <item>Alinea</item>
+        <item>The Publican</item>
+        <item>Gibsons Bar and Steakhouse</item>
+    </string-array>
+
+    <!-- Restaurant URLs -->
+    <string-array name="restaurants_urls">
+        <item>https://www.girlandthegoat.com</item>
+        <item>https://www.loumalnatis.com</item>
+        <item>https://www.alinearestaurant.com</item>
+        <item>https://www.thepublicanrestaurant.com</item>
+        <item>https://www.gibsonssteakhouse.com</item>
+    </string-array>
 </resources>
