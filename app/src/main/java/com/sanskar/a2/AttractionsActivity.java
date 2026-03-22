@@ -1,5 +1,6 @@
 package com.sanskar.a2;
 
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -36,6 +42,7 @@ public class AttractionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places);
+        setSupportActionBar(findViewById(R.id.toolbar));
 
         mListContainer = findViewById(R.id.list_fragment_container);
         mWebViewContainer = findViewById(R.id.webview_fragment_container);
@@ -79,14 +86,20 @@ public class AttractionsActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
                 if (action == null) return;
+
                 if (action.equals(RESTAURANTS_INTENT)) {
-                    Intent i = new Intent(AttractionsActivity.this, RestaurantsActivity.class);
-                    startActivity(i);
+                    Intent i = new Intent(context, RestaurantsActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                            Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    context.startActivity(i);
+                } else if (action.equals(ATTRACTIONS_INTENT)) {
+                    Intent i = new Intent(context, AttractionsActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                            Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    context.startActivity(i);
                 }
-                // If ATTRACTIONS_INTENT, we are already here, do nothing
             }
         };
-
         mFilter = new IntentFilter();
         mFilter.addAction(ATTRACTIONS_INTENT);
         mFilter.addAction(RESTAURANTS_INTENT);
