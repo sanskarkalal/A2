@@ -1,21 +1,16 @@
 package com.sanskar.a2;
 
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -44,12 +39,18 @@ public class AttractionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_places);
         setSupportActionBar(findViewById(R.id.toolbar));
 
+        // Request SYSTEM_ALERT_WINDOW permission if not granted
+        if (!Settings.canDrawOverlays(this)) {
+            Intent permIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            startActivity(permIntent);
+        }
+
         mListContainer = findViewById(R.id.list_fragment_container);
         mWebViewContainer = findViewById(R.id.webview_fragment_container);
 
         mFragmentManager = getSupportFragmentManager();
 
-        // Set up list fragment with attractions data
         if (savedInstanceState == null) {
             PlacesListFragment listFragment = new PlacesListFragment();
             Bundle args = new Bundle();
@@ -62,7 +63,6 @@ public class AttractionsActivity extends AppCompatActivity {
             ft.commit();
         }
 
-        // Observe ViewModel to add WebView fragment when item selected
         PlacesViewModel model = new ViewModelProvider(this).get(PlacesViewModel.class);
         model.getSelectedUrl().observe(this, url -> {
             if (url != null && !url.isEmpty() && !mWebViewFragment.isAdded()) {
@@ -75,12 +75,9 @@ public class AttractionsActivity extends AppCompatActivity {
             setLayout();
         });
 
-        // Reset layout when back is pressed
         mFragmentManager.addOnBackStackChangedListener(this::setLayout);
-
         setLayout();
 
-        // Register broadcast receiver programmatically
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -100,22 +97,20 @@ public class AttractionsActivity extends AppCompatActivity {
                 }
             }
         };
+
         mFilter = new IntentFilter();
         mFilter.addAction(ATTRACTIONS_INTENT);
         mFilter.addAction(RESTAURANTS_INTENT);
-
         registerReceiver(mReceiver, mFilter, Context.RECEIVER_EXPORTED);
     }
 
     private void setLayout() {
         if (!mWebViewFragment.isAdded()) {
-            // List takes full width
             mListContainer.setLayoutParams(new LinearLayout.LayoutParams(
                     MATCH_PARENT, MATCH_PARENT));
             mWebViewContainer.setLayoutParams(new LinearLayout.LayoutParams(
                     0, MATCH_PARENT));
         } else {
-            // List takes 1/3, WebView takes 2/3
             mListContainer.setLayoutParams(new LinearLayout.LayoutParams(
                     0, MATCH_PARENT, 1f));
             mWebViewContainer.setLayoutParams(new LinearLayout.LayoutParams(
@@ -133,7 +128,6 @@ public class AttractionsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_attractions) {
-            // Already here, do nothing
             return true;
         } else if (id == R.id.menu_restaurants) {
             Intent i = new Intent(this, RestaurantsActivity.class);
