@@ -83,12 +83,9 @@ public class AttractionsActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
                 if (action == null) return;
-
                 if (action.equals(RESTAURANTS_INTENT)) {
-                    Intent i = new Intent(context, RestaurantsActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                            Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    context.startActivity(i);
+                    startActivity(new Intent(AttractionsActivity.this, RestaurantsActivity.class));
+
                 } else if (action.equals(ATTRACTIONS_INTENT)) {
                     Intent i = new Intent(context, AttractionsActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
@@ -142,4 +139,5 @@ public class AttractionsActivity extends AppCompatActivity {
         super.onDestroy();
         unregisterReceiver(mReceiver);
     }
+
 }

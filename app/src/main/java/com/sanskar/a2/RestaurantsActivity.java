@@ -93,4 +93,5 @@ public class RestaurantsActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
